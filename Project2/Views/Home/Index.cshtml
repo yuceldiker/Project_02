@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Project2.Models.User>
+
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+<div class="tab-content">
+    <div class="tab-pane container active p-0" id="home" style="margin-top:15px;">
+        <table id="userTable" class="table table-bordered">
+            <thead class="thead-dark text-white">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+            <div class="form-vertical">
+                <input type="text" name="txtFName" id="txtFName" placeholder="First Name" />
+                <input type="text" name="txtLName" id="txtLName" placeholder="Last Name" />
+                <input type="text" name="txtPhone" id="txtPhone" placeholder="Phone" />
+                <input type="text" name="txtEmail" id="txtEmail" placeholder="Email" />
+                <input type="button" id="btnSave" value="Create User" />
+            </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.5.1.min.js"></script>
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#userTable").DataTable({
+            "ajax": {
+                "url": "@Url.Action("GetUsers", "Home")",
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "FirstName" },
+                { "data": "LastName" },
+                { "data": "Phone" },
+                { "data": "Email" }
+            ],
+        });
+    });
+
+
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "Home/AddUser",
+                    data: {
+                        FirstName: $("#txtFName").val(),
+                        LastName: $("#txtLName").val(),
+                        Phone: $("#txtPhone").val(),
+                        Email: $("#txtEmail").val()
+                    },
+                    success: function () {
+                        alert("User is created! Please refresh the page to see the new updated list! ");
+                    }
+                });
+
+        });
+
+    });
+
+</script>
+
